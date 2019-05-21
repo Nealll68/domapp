@@ -30,59 +30,57 @@
 
 	<v-dialog v-model="dialog" transition="dialog-bottom-transition" max-width="700px">
 		<v-card>
-			<v-toolbar dark color="primary" class="mb-3">
-				<v-btn icon dark @click="dialog = false">
+			<v-card-title class="headline grey lighten-2">
+				<v-btn icon @click="dialog = false">
 					<v-icon>fas fa-times</v-icon>
 				</v-btn>
+				Création d'un scénario
+			</v-card-title>
 
-				<v-toolbar-title>Création d'un scénario</v-toolbar-title>
+			<v-card-text>
+				<v-form v-model="valid" lazy-validation>
+					<v-layout>
+						<v-flex xs12 md6 class="mr-2">
+							<v-text-field v-model="scenarioCreation.name" label="Nom"></v-text-field>
+						</v-flex>
 
-				<v-spacer></v-spacer>
+						<v-flex xs12 md6>
+							<v-select :value="scenarioCreation.action" :items="actionItems" label="Action" solo></v-select>
+						</v-flex>
+					</v-layout>
 
-				<v-toolbar-items>
-					<v-btn dark flat @click="dialog = false">
-						<v-icon>fas fa-save</v-icon>
-						Sauvegarder
-					</v-btn>
-				</v-toolbar-items>
-			</v-toolbar>
+					<v-layout>
+						<v-flex xs12 md12>
+							<v-radio-group v-model="scenarioCreation.isRecurrent" row>
+								<v-radio value="0" label="Action récurrente"></v-radio>
+								<v-radio value="1" label="Action non récurrente"></v-radio>
+							</v-radio-group>
+						</v-flex>
+					</v-layout>
 
-			<v-form v-model="valid" lazy-validation class="pa-2">
-				<v-layout>
-					<v-flex xs12 md6 class="mr-2">
-						<v-text-field v-model="scenarioCreation.name" label="Nom"></v-text-field>
-					</v-flex>
+					<v-layout>
+						<v-flex xs12 md6 class="mr-2">
+							<v-menu v-model="datePickerMenu" :close-on-content-click="false" full-width max-width="290">
+								<template v-slot:activator="{ on }">
+									<v-text-field :value="computedDateFormatted" clearable label="Choix de la date" readonly v-on="on"></v-text-field>									
+								</template>
+								<v-date-picker v-model="datePickerVal" @change="datePickerMenu = false" locale="fr-fr"></v-date-picker>
+							</v-menu>
+						</v-flex>
 
-					<v-flex xs12 md6>
-						<v-select :value="scenarioCreation.action" :items="actionItems" label="Action" solo></v-select>
-					</v-flex>
-				</v-layout>
-
-				<v-layout>
-					<v-flex xs12 md12>
-						<v-radio-group v-model="scenarioCreation.isRecurrent" row>
-							<v-radio value="0" label="Action récurrente"></v-radio>
-							<v-radio value="1" label="Action non récurrente"></v-radio>
-						</v-radio-group>
-					</v-flex>
-				</v-layout>
-
-				<v-layout>
-					<v-flex xs12 md6 class="mr-2">
-						
-					</v-flex>
-
-					<v-flex xs12 md6>
-						<v-select :value="scenarioCreation.action" :items="actionItems" label="Action" solo></v-select>
-					</v-flex>
-				</v-layout>
-			</v-form>
+						<v-flex xs12 md6>
+							
+						</v-flex>
+					</v-layout>
+				</v-form>
+			</v-card-text>
 		</v-card>
 	</v-dialog>
 </div>
 </template>
 
 <script>
+
 export default {
 	name: 'page-scenario',
 
@@ -99,6 +97,7 @@ export default {
 			scenarios: [],
 			dialog: false,
 			valid: false,
+			datePickerMenu: false,
 			actionItems: [
 				'Allumer l\'éclairage intérieur',
 				'Eteindre l\'éclairage intérieur',
@@ -116,7 +115,14 @@ export default {
 				execution_at: '',
 				day: '',
 				time: ''
-			}
+			},
+			datePickerVal: this.$moment().toISOString().substr(0, 10)
+		}
+	},
+
+	computed: {
+		computedDateFormatted () {
+			return this.datePickerVal ? this.$moment(this.datePickerVal).format('ddd Do MMMM YYYY') : ''
 		}
 	}
 }

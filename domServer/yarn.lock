@@ -143,31 +143,31 @@
     haye "^2.0.1"
     lodash "^4.17.5"
 
-"@serialport/binding-abstract@^2.0.4":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@serialport/binding-abstract/-/binding-abstract-2.0.4.tgz#49e1d455f6515cae9007be686a177e5c54c548fb"
-  integrity sha512-0ZcSB6Gdxal55R/5McB0O359coXrO/GrmJlZ13cwN67gLsvmhmexCsd8b+H9CQ7dAbLih4HZSbfG9v8crrB0Gg==
+"@serialport/binding-abstract@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@serialport/binding-abstract/-/binding-abstract-2.0.5.tgz#e13305467c12effcd32c19c8b686a3f629e55cb3"
+  integrity sha512-oRg0QRsXJFKHQbQjmo0regKLZ9JhjLmTqc47ocJgYM5UtU9Q1VFrVPh0B2lr2pfm/tr3aNvTLX1eiVAvXyZ/bg==
   dependencies:
-    debug "^4.1.0"
+    debug "^4.1.1"
 
-"@serialport/binding-mock@^2.0.4":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@serialport/binding-mock/-/binding-mock-2.0.4.tgz#a84f30bac388956154e073e49c789a2c9d46ed9c"
-  integrity sha512-7c2dzVwwQIZKk+NFqC1mG0sTAwWR/GJY/4QbTn1Au3TnXhTj8nESYW/dURwsq6dGyl8+ZIPpKlRNu5Pr2tNxAQ==
+"@serialport/binding-mock@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@serialport/binding-mock/-/binding-mock-2.0.5.tgz#328bc73189843623531743133d95aa29c2a25a1d"
+  integrity sha512-1kD1qI686pIIolGZ6TPjAtvy8c3XIUlE4OXRZf7ZHaZgGaOUHAUMLKZt4tNTxsfedRTFyiYyHoe5QAbx82R9pQ==
   dependencies:
-    "@serialport/binding-abstract" "^2.0.4"
-    debug "^4.1.0"
+    "@serialport/binding-abstract" "^2.0.5"
+    debug "^4.1.1"
 
-"@serialport/bindings@^2.0.7":
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/@serialport/bindings/-/bindings-2.0.7.tgz#dfbec48113e323759a642185a0c537b988a696b8"
-  integrity sha512-XNSad/Eh73Dx4gIG8cfwSwUeSznEmjBeaaU5PVAMztwNJrDd9DG0eBvbzxGbBc1ol5RR4sK82I01dCAOjseLAg==
+"@serialport/bindings@^2.0.8":
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/@serialport/bindings/-/bindings-2.0.8.tgz#30344814cc284c5ed4f76af644c9cdbd1b240e59"
+  integrity sha512-paKLa9JkoH5FAy2sATTdXLCiKpuKn0pN15/etcCqzX8vi25fnQgJ8Yx9Z6zdbcKe1No7s/9PuH9yfjDR61fbOQ==
   dependencies:
-    "@serialport/binding-abstract" "^2.0.4"
+    "@serialport/binding-abstract" "^2.0.5"
     "@serialport/parser-readline" "^2.0.2"
     bindings "^1.3.0"
-    debug "^4.1.0"
-    nan "^2.12.1"
+    debug "^4.1.1"
+    nan "^2.13.2"
     prebuild-install "^5.2.1"
 
 "@serialport/parser-byte-length@^2.0.2":
@@ -202,13 +202,13 @@
   resolved "https://registry.yarnpkg.com/@serialport/parser-regex/-/parser-regex-2.0.2.tgz#fde13ca38770ea53a77e8f0c53b2c46b2cef805a"
   integrity sha512-7qjYd7AdHUK8fJOmHpXlMRipqRCVMMyDFyf/5TQQiOt6q+BiFjLOtSpVXhakHwgnXanzDYKeRSB8zM0pZZg+LA==
 
-"@serialport/stream@^2.0.4":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@serialport/stream/-/stream-2.0.4.tgz#9bc9cf9b2a8bbc3521b8f8eb74afa3c97fb09d4f"
-  integrity sha512-x1OzTGGTA/ioE/wx7sM11KVxkZr5MqZNVTQXezl6wySCl5BkQTj1nc37e99p6aRQjMxAoY8BfIDJKXWwT5LSsA==
+"@serialport/stream@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@serialport/stream/-/stream-2.0.5.tgz#1a39be184e23de1abe229df00469944ac45118c3"
+  integrity sha512-9gc3zPoAqs/04mvq8TdZ7GxtnacCDuw3/u0u18UXXHgC/5tNDYkY+hXFIJB1fQFnP5yyNB1L2XLfX974ySJg9Q==
   dependencies:
-    "@serialport/binding-mock" "^2.0.4"
-    debug "^4.1.0"
+    "@serialport/binding-mock" "^2.0.5"
+    debug "^4.1.1"
 
 accepts@^1.3.5:
   version "1.3.5"
@@ -2023,10 +2023,10 @@ mysql@^2.17.1:
     safe-buffer "5.1.2"
     sqlstring "2.3.1"
 
-nan@^2.12.1:
-  version "2.13.2"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-2.13.2.tgz#f51dc7ae66ba7d5d55e1e6d4d8092e802c9aefe7"
-  integrity sha512-TghvYc72wlMGMVMluVo9WRJc0mB8KxxF/gZ4YYFy7V2ZQX9l7rgbPg7vjS9mt6U5HXODVFVI2bOduCzwOMv/lw==
+nan@^2.13.2:
+  version "2.14.0"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
+  integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
 
 nanomatch@^1.2.9:
   version "1.2.13"
@@ -2757,21 +2757,21 @@ send@0.16.2, send@^0.16.1:
     range-parser "~1.2.0"
     statuses "~1.4.0"
 
-serialport@^7.1.4:
-  version "7.1.4"
-  resolved "https://registry.yarnpkg.com/serialport/-/serialport-7.1.4.tgz#b5ac4cf5be1b4b88b4495aafc0f9371e532d9537"
-  integrity sha512-noYd5lfK5MZfyiuCx4o/3s/iaS076HaWDjmhsGJSfdNCGnxfVfDKQBK6xmXbtSlaJAwV7BPU12p844OTzHoA+Q==
+serialport@^7.1.5:
+  version "7.1.5"
+  resolved "https://registry.yarnpkg.com/serialport/-/serialport-7.1.5.tgz#3395e3cc33c6584731ccce62aaa82b0f6b7e0077"
+  integrity sha512-NplGdqaY+ZL8t3t5egbT+3oqLW4d7WvDT/x1ACxAyWa1fSnx+KTAmlDHeCls39lXwu8voaOr3bPOW4bwM7PdAA==
   dependencies:
-    "@serialport/binding-mock" "^2.0.4"
-    "@serialport/bindings" "^2.0.7"
+    "@serialport/binding-mock" "^2.0.5"
+    "@serialport/bindings" "^2.0.8"
     "@serialport/parser-byte-length" "^2.0.2"
     "@serialport/parser-cctalk" "^2.0.2"
     "@serialport/parser-delimiter" "^2.0.2"
     "@serialport/parser-readline" "^2.0.2"
     "@serialport/parser-ready" "^2.0.2"
     "@serialport/parser-regex" "^2.0.2"
-    "@serialport/stream" "^2.0.4"
-    debug "^4.1.0"
+    "@serialport/stream" "^2.0.5"
+    debug "^4.1.1"
 
 serve-static@^1.13.2:
   version "1.13.2"

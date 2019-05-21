@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
 import Vuetify from 'vuetify'
-import VueMoment from 'vue-moment'
 
 import App from './App'
 import router from './router'
@@ -23,7 +22,12 @@ Vue.use(Vuetify, {
   iconfont: 'fa'
 })
 
-Vue.use(VueMoment)
+const moment = require('moment')
+require('moment/locale/fr')
+
+Vue.use(require('vue-moment'), {
+  moment
+})
 
 Vue.component('error-dialog', ErrorDialog)
 
