@@ -1,0 +1,69 @@
+html {
+	overflow-y: auto !important;
+}
+
+.pace .pace-progress {
+	background: #1E88E5;
+	height: 3px;
+}
+
+.pace .pace-activity {
+	border-top-color: #1E88E5;
+    border-left-color: #1E88E5;
+}
+
+.v-content__wrap {
+	background: rgb(238,238,238) !important;
+}
+
+.system-bar-drag {
+    -webkit-app-region: drag;
+}
+
+.nodrag {
+    -webkit-app-region: no-drag;
+}
+
+.system-bar-icon {
+    font-size: 16px !important;
+}
+
+#navbar {
+    background-color: #212121 !important;
+}
+
+#navbar .v-list__tile {    
+    border-radius: 4px !important;
+    transition: background .3s cubic-bezier(.25,.8,.5,1) !important;
+}
+
+#navbar .success {
+	border-radius: 4px !important;
+    background-color: #4caf50 !important;
+    -webkit-box-shadow: 0 12px 20px -10px rgba(76,175,80,.28),0 4px 20px 0 rgba(0,0,0,.12),0 7px 8px -5px rgba(76,175,80,.2) !important;
+    box-shadow: 0 12px 20px -10px rgba(76,175,80,.28),0 4px 20px 0 rgba(0,0,0,.12),0 7px 8px -5px rgba(76,175,80,.2) !important;
+}
+
+#navbar .primary--text {
+	color: inherit !important;
+	
+}
+
+#navbar .v-divider {
+    margin: auto !important;
+    width: calc(100% - 30px) !important;
+}
+
+.card-loading-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.alarms-historic {
+    max-height: 300px;
+    overflow-x: auto;
+}
