@@ -41,3 +41,9 @@ Route.group(() => {
 	Route.get('/', 'SettingController.get')
 	Route.post('/', 'SettingController.set')
 }).prefix('api/setting')
+
+Route.group(() => {
+	Route.get('/all', 'ScenarioController.getAll')
+	Route.post('/create', 'ScenarioController.create')
+	Route.post('/delete', 'ScenarioController.delete')
+}).prefix('/api/scenario')

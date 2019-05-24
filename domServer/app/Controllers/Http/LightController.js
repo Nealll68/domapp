@@ -21,9 +21,15 @@ class LightController {
     }
 
     async setLightState ({ request, response }) {
-        const data = request.only(['position', 'state'])
+        let data = request.only(['position', 'state', 'android'])
 
         try {
+            if (data.android) {
+                let dataSplit = data.android.split(';')
+                data.position = dataSplit[0]
+                data.state = dataSplit[1]
+            }
+
             LightService.setState(data.position, data.state)
 
             response.ok()

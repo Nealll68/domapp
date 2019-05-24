@@ -17,7 +17,7 @@
                     <v-divider></v-divider>
 
                     <v-subheader>Température à maintenir en °C</v-subheader>
-                    <v-slider class="mt-4" v-model="heaterThreshold" min="10" max="30" thumb-label="always" :loading="sliderLoading" :disabled="sliderLoading"></v-slider>
+                    <v-slider class="mt-4" v-model="heaterThreshold" min="12" max="30" thumb-label="always" :loading="sliderLoading" :disabled="sliderLoading"></v-slider>
                 </v-card-text>
             </v-card>
         </v-flex>

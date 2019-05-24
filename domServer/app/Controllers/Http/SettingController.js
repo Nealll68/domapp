@@ -20,13 +20,19 @@ class SettingController {
         }
     }
 
-    async set ({ request, response }) {
-        const data = request.only(['field', 'value'])
+    async set ({ request, response }) {        
+        let data = request.only(['field', 'value', 'android'])       
 
         try {
             const settings = await Setting.find(1)
 
-            if (data.field === 'lightAutoMode') {
+            if (data.android) {
+                let dataSplit = data.android.split(';')
+                data.field = dataSplit[0]
+                data.value = dataSplit[1]
+            }
+
+           if (data.field === 'lightAutoMode') {
                 settings.merge({ lightAutoMode: data.value })
                 //TcpServer.send('ni', `setLightAutoMode;${data.value}`)
             } else if (data.field === 'lightThreshold') {
@@ -40,10 +46,10 @@ class SettingController {
                 // COM ARDUINO
             } else if (data.field === 'alarmState') {
                 settings.merge({ alarmState: data.value })
-                //TcpServer.send('pi', `setAlarmState;${data.value}`)
+                TcpServer.send('pi', `alarm${data.value ? 'On' : 'Off'}`)
             }
 
-            await settings.save()            
+            await settings.save()
             response.ok()
         } catch (ex) {
             response.internalServerError(ex.toString())
