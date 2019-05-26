@@ -58,7 +58,8 @@ export default {
             switchLoading: false,
             cardLoading: false,
             alarms: null,
-            toggleAlarm: false
+            toggleAlarm: false,
+            alarmStateIsInit: false
         }
     },
     
@@ -79,23 +80,27 @@ export default {
 
         this.switchLoading = false
         this.cardLoading = false
+        this.alarmStateIsInit = true
     },
 
     watch: {
         async toggleAlarm (value) {
-			this.switchLoading = true
-			
-			try {
-				await this.$http.post('/api/setting', {
-                    field: 'alarmState',
-					value: this.toggleAlarm
-				})
-			} catch (ex) {
-				this.errorDialog = true
-            	this.errorMsg = ex.response.data
-			}
+            if (this.alarmStateIsInit) {
+                this.switchLoading = true
+                
+                try {
+                    console.log('xxx')
+                    await this.$http.post('/api/setting', {
+                        field: 'alarmState',
+                        value: this.toggleAlarm
+                    })
+                } catch (ex) {
+                    this.errorDialog = true
+                    this.errorMsg = ex.response.data
+                }
 
-			this.switchLoading = false				
+                this.switchLoading = false				
+            }
         }
     }
 }
