@@ -11,8 +11,6 @@
 
 			<light-block></light-block>
 		</v-layout>
-
-		<v-btn @click="testSnack()">Test snackbar</v-btn>
 	</div>
 </template>
 
@@ -31,12 +29,6 @@ export default {
 		LumBlock,
 		AlarmBlock,
 		LightBlock
-	},
-
-	methods: {
-		testSnack () {
-			this.$store.dispatch('showSnackbar', { message: 'my snackbar test' })
-		}
 	}
 }
 </script>

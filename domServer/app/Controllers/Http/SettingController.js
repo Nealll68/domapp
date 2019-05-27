@@ -1,7 +1,10 @@
 'use strict'
 
 const Setting = use('App/Models/Setting')
-const TcpServer = use('App/Services/TcpServer')
+
+const LightService = use('App/Services/LightService')
+const HeaterService = use('App/Services/HeaterService')
+const AlarmService = use('App/Services/AlarmService')
 
 class SettingController {
     async get ({ response }) {
@@ -24,8 +27,6 @@ class SettingController {
         let data = request.only(['field', 'value', 'android'])       
 
         try {
-            const settings = await Setting.find(1)
-
             if (data.android) {
                 let dataSplit = data.android.split(';')
                 data.field = dataSplit[0]
@@ -33,23 +34,17 @@ class SettingController {
             }
 
            if (data.field === 'lightAutoMode') {
-                settings.merge({ lightAutoMode: data.value })
-                //TcpServer.send('ni', `setLightAutoMode;${data.value}`)
+                await LightService.switchMode(data.value)
             } else if (data.field === 'lightThreshold') {
-                settings.merge({ lightThreshold: data.value })
-                //TcpServer.send('ni', `setLightThreshold;${data.value}`)
+                await LightService.setThreshold(data.value)
             } else if (data.field === 'heaterState') {
-                settings.merge({ heaterState: data.value })
-                // COM ARDUINO
+                await HeaterService.switchState(data.value)
             } else if (data.field === 'heaterThreshold') {
-                settings.merge({ heaterThreshold: data.value })
-                // COM ARDUINO
+                await HeaterService.setThreshold(data.value)
             } else if (data.field === 'alarmState') {
-                settings.merge({ alarmState: data.value })
-                TcpServer.send('pi', `alarm${data.value ? 'On' : 'Off'}`)
+                await AlarmService.switchState(data.value)
             }
 
-            await settings.save()
             response.ok()
         } catch (ex) {
             response.internalServerError(ex.toString())

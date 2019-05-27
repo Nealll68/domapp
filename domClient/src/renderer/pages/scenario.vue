@@ -20,8 +20,8 @@
 				<td>{{ props.item.day ? getDayText(props.item.day) : '/' }}</td>
 				<td>{{ props.item.time ? props.item.time : '/' }}</td>
 				<td>
-          			<v-icon small @click="deleteItem(props.item)">fas fa-trash-alt</v-icon>
-        		</td>
+					<v-icon small @click="deleteItem(props.item)">fas fa-trash-alt</v-icon>
+				</td>
 			</template>
 			
 			<template slot="no-data">
@@ -129,14 +129,14 @@ export default {
 				{ text: 'Eteindre le chauffage', value: 'heaterOff' }
 			],
 			dayItems: [
-				{ text: 'Tous les jours', value: 'allDays' },
-				{ text: 'Lundi', value: 'monday' },
-				{ text: 'Mardi', value: 'tuesday' },
-				{ text: 'Mercredi', value: 'wednesday' },
-				{ text: 'Jeudi', value: 'thursday' },
-				{ text: 'Vendredi', value: 'friday' },
-				{ text: 'Samedi', value: 'saturday' },
-				{ text: 'Dimanche', value: 'sunday' }				
+				{ text: 'Tous les jours', value: '-1' },
+				{ text: 'Lundi', value: '1' },
+				{ text: 'Mardi', value: '2' },
+				{ text: 'Mercredi', value: '3' },
+				{ text: 'Jeudi', value: '4' },
+				{ text: 'Vendredi', value: '5' },
+				{ text: 'Samedi', value: '6' },
+				{ text: 'Dimanche', value: '0' }				
 			],
 			name: '',
 			action: null,
@@ -146,8 +146,8 @@ export default {
 			timePickerVal: '',
 			formRules: {
 				nameRules: [
-					v => !!v || 'Un nom est requis',
-					v => v.length <= 255 || 'Le taille du nom doit être inférieur à 255 caractères'
+					v => !!v || 'Un nom est requis'/*,
+					v => v.length <= 255 || 'Le taille du nom doit être inférieur à 255 caractères'*/
 				],
 				actionRules: [
 					v => !!v || 'Une action est requise'
@@ -199,27 +199,14 @@ export default {
 
 					this.dialog = false
 					this.$refs.form.reset()
+					this.$store.dispatch('showSnackbar', { message: 'Le scénario a bien été créé' })
 				}
 			} catch (ex) {
 				this.errorDialog = true
             	this.errorMsg = ex.response.data
 			}
 			this.formLoading = false
-		},
-
-		getActionText (value) {
-			let index = this.actionItems.findIndex(x => x.value === value)
-			return this.actionItems[index].text
-		},
-
-		getDayText (value) {
-			let index = this.dayItems.findIndex(x => x.value === value)
-			return this.dayItems[index].text
-		},
-
-		getReadableDate (value) {
-			return this.$moment(value).format('ddd Do MMMM YYYY')
-		},
+		},	
 
 		async deleteItem (item) {
 			this.tableLoading = true
@@ -236,6 +223,20 @@ export default {
 			}
 
 			this.tableLoading = false
+		},
+
+		getActionText (value) {
+			let index = this.actionItems.findIndex(x => x.value === value)
+			return this.actionItems[index].text
+		},
+
+		getDayText (value) {
+			let index = this.dayItems.findIndex(x => x.value === value)
+			return this.dayItems[index].text
+		},
+
+		getReadableDate (value) {
+			return this.$moment(value).format('ddd Do MMMM YYYY')
 		}
 	}
 }

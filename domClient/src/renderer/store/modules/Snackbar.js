@@ -1,10 +1,10 @@
 const state = {
-    snack: ''
+    message: ''
 }
 
 const mutations = {
-    show (state, snack) {
-        state.snack = snack
+    show (state, message) {
+        state.message = message
     }
 }
 
@@ -13,6 +13,7 @@ const actions = {
         commit('show', message)
     }
 }
+
 
 export default {
     state,
