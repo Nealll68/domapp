@@ -112,9 +112,11 @@ class TcpServer {
         } else if (reqType === 'init') {
             const settings = await Setting.find(1)
             this.send('pi', `init;${settings.alarmState}`)
-        } else if (reqType === 'alert') {
+        } else if (reqType === 'alarm') {
             const alarm = new Alarm()
+
             alarm.alarmState = reqValue
+
             await alarm.save()
         }
     }

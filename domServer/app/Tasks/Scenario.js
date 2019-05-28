@@ -11,7 +11,7 @@ const moment = require('moment')
 
 class Scenario extends Task {
     static get schedule () {
-        return '*/30 * * * * *'
+        return '*/60 * * * * *'
     }
 
     async handle () {        

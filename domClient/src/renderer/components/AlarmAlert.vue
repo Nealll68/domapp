@@ -28,7 +28,7 @@ export default {
     created () {
         setInterval(function () {
             this.checkAlarm()
-        }.bind(this), 3000)
+        }.bind(this), 2000)
     },
 
     methods: {
