@@ -47,3 +47,41 @@ Route.group(() => {
 	Route.post('/create', 'ScenarioController.create')
 	Route.post('/delete', 'ScenarioController.delete')
 }).prefix('/api/scenario')
+
+Route.get('/video', async ({ request, response }) => {
+	console.log('xxx')
+
+	const fs = require('fs')
+	const Helpers = use('Helpers')
+
+	const path = Helpers.publicPath('sample.mp4')
+	const stat = fs.statSync(path)
+	const fileSize = stat.size
+	const range = request.header('range')
+
+	try {
+	if (range) {
+		const parts = range.replace(/bytes=/, "").split("-")
+		const start = parseInt(parts[0], 10)
+		const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1
+		const chunksize = (end - start) + 1
+		const file = fs.createReadStream(path, { start, end })
+
+		response.header('Content-Range', `bytes ${start}-${end}/${fileSize}`)
+		response.header('Accept-Ranges', 'bytes')
+		response.header('Content-Length', chunksize)
+		response.header('Content-Type', 'video/mp4')
+		response.partialContent()
+
+		file.pipe(fs.createWriteStream(response.toString()))
+	} else {
+		response.header('Content-Length', fileSize)
+		response.header('Content-Type', 'video/mp4')
+		response.ok()
+
+		fs.createReadStream(path).pipe(fs.createWriteStream(response.toString()))
+	}
+} catch (ex) {
+	console.log(ex)
+}
+})

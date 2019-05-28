@@ -9,7 +9,7 @@
 
 			<alarm-block></alarm-block>
 
-			<light-block></light-block>
+			<light-block></light-block>			
 		</v-layout>
 	</div>
 </template>
@@ -29,6 +29,10 @@ export default {
 		LumBlock,
 		AlarmBlock,
 		LightBlock
+	},
+
+	mounted () {
+		console.log(this.$electron.remote.app.getPath('documents'))
 	}
 }
 </script>
