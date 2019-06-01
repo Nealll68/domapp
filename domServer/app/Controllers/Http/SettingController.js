@@ -25,7 +25,7 @@ class SettingController {
 
     async set ({ request, response }) {        
         let data = request.only(['field', 'value', 'android'])       
-
+        
         try {
             if (data.android) {
                 let dataSplit = data.android.split(';')

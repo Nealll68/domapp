@@ -6,10 +6,13 @@ const Readline = require('@serialport/parser-readline')
 const Temperature = use('App/Models/Temperature')
 const Humidity = use('App/Models/Humidity')
 const Setting = use('App/Models/Setting')
+const AlarmService = use('App/Services/AlarmService')
+
+const SerialUnreachableException = use('App/Exceptions/SerialUnreachableException')
 
 class SerialService {
     constructor () {
-        this.port = new SerialPort('COM3', {
+        this.port = new SerialPort('\\\\.\\COM3', {
             baudRate: 9600
         })
 
@@ -20,6 +23,7 @@ class SerialService {
         })
 
         this.parser.on('data', (data) => {
+            console.log(data)
             this.handleData(data)
         })
     }
@@ -29,16 +33,17 @@ class SerialService {
             this.port.write(data)
         } catch (ex) {
             console.log(ex)
+            throw new SerialUnreachableException('Impossible de joindre l\'Arduino')
         }
     }
 
     async handleData (data) {
         // Split string and handle data
         let dataSplit = data.toString().split(';')
-        
-        if (dataSplit[0] === 'init') {
+
+        if (dataSplit[0] === 'init') {            
             const allSettings = await Setting.find(1)
-            const initMessage = `init;${allSettings.heaterState};${allSettings.heaterThreshold}`
+            const initMessage = `init2;${allSettings.heaterState};${allSettings.heaterThreshold}`
             this.send(initMessage)
         } else if (dataSplit[0] === 'temperature') {
             const temperature = new Temperature()
@@ -48,6 +53,8 @@ class SerialService {
             const humidity = new Humidity()
             humidity.humidity = Number.parseFloat(dataSplit[1]).toFixed(0)
             await humidity.save()
+        } else if (dataSplit[0] === 'alarm') {
+            await AlarmService.launchAlert()
         }
     }
 }

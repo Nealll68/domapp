@@ -223,6 +223,7 @@ export default {
 			}
 
 			this.tableLoading = false
+			this.$store.dispatch('showSnackbar', { message: 'Le scénario a bien été supprimé' })
 		},
 
 		getActionText (value) {

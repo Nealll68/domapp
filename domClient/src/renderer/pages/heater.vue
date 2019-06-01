@@ -38,7 +38,8 @@ export default {
             switchLoading: false,
             sliderLoading: false,
             toggleHeater: false,
-            heaterThreshold: 0
+            heaterThreshold: 0,
+            toggleHeaterInit: false
         }
     },
     
@@ -58,23 +59,29 @@ export default {
 
         this.switchLoading = false
         this.sliderLoading = false
+        setTimeout(function () {
+            this.toggleHeaterInit = true            
+        }.bind(this), 500)
     },
 
     watch: {
         async toggleHeater (value) {
-            this.switchLoading = true
-			
-			try {
-				await this.$http.post('/api/setting', {
-                    field: 'heaterState',
-					value: this.toggleHeater
-				})
-			} catch (ex) {
-				this.errorDialog = true
-            	this.errorMsg = ex.response.data
-			}
+            if (this.toggleHeaterInit) {
+                this.switchLoading = true
+                
+                try {
+                    await this.$http.post('/api/setting', {
+                        field: 'heaterState',
+                        value: this.toggleHeater
+                    })
+                    this.$store.dispatch('showSnackbar', { message: `Chauffage ${this.toggleHeater ? 'allumée' : 'éteint'}` })				
+                } catch (ex) {
+                    this.errorDialog = true
+                    this.errorMsg = ex.response.data
+                }
 
-			this.switchLoading = false				
+                this.switchLoading = false
+            }
         },
         
         heaterThreshold (value) {
@@ -83,7 +90,7 @@ export default {
     },
 
     created () {
-		this.debouncedHeaterThreshold = _.debounce(this.setHeaterThreshold, 500)
+		this.debouncedHeaterThreshold = _.debounce(this.setHeaterThreshold, 1000)
 	},
 
     methods: {

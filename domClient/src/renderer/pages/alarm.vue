@@ -30,19 +30,14 @@
                 <v-divider></v-divider>
 
                 <v-card-text class="alarms-historic">
-                    <v-alert :value="true" v-for="alarm in alarms" :key="alarm.id" :color="alarm.alarmState ? 'error' : 'success'" :icon="alarm.alarmState ? 'fas fa-exclamation-triangle' : 'fas fa-check'" outline>
-                        {{ alarm.created_at | moment('D/M/YYYY HH:mm') }} :
-                        <span v-if="alarm.alarmState">                        
-                            Alarme activée
-                        </span>
-                        <span v-else>                        
-                            Alarme désactivée
-                        </span>
+                    <v-alert :value="true" v-for="alarm in alarms" :key="alarm.id" icon="fas fa-exclamation-triangle" outline>
+                        {{ alarm.created_at | moment('DD/MM/YYYY HH:mm') }} :                        
+                        Alarme déclenchée
                     </v-alert>
 
                 </v-card-text>
             </v-card>
-        </v-flex>
+        </v-flex>        
     </v-layout>
 </div>
 </template>
@@ -72,7 +67,7 @@ export default {
             this.alarms = response.data.alarms
 
             const settings = await this.$http.get('/api/setting')
-            this.toggleAlarm = settings.data.alarmState
+            this.toggleAlarm = settings.data.alarmState            
         } catch (ex) {
             this.errorDialog = true
             this.errorMsg = ex.response.data
@@ -80,26 +75,29 @@ export default {
 
         this.switchLoading = false
         this.cardLoading = false
-        this.alarmStateIsInit = true
+        setTimeout(function () {
+            this.alarmStateIsInit = true            
+        }.bind(this), 500)
     },
 
     watch: {
         async toggleAlarm (value) {
             if (this.alarmStateIsInit) {
                 this.switchLoading = true
-                
+
                 try {
-                    console.log('xxx')
                     await this.$http.post('/api/setting', {
                         field: 'alarmState',
                         value: this.toggleAlarm
                     })
+                    this.$store.dispatch('showSnackbar', { message: `Alarme ${this.toggleAlarm ? 'activée' : 'désactivée'}` })
                 } catch (ex) {
                     this.errorDialog = true
                     this.errorMsg = ex.response.data
                 }
 
-                this.switchLoading = false				
+                this.switchLoading = false
+				
             }
         }
     }

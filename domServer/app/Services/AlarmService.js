@@ -6,12 +6,23 @@ const TcpServer = use('App/Services/TcpServer')
 class AlarmService {
 
     async switchState (state) {
-        const setting = await Setting.find(1)
+        try {            
+            const setting = await Setting.find(1)
+            setting.merge({ alarmState: state })
+            await setting.save()
 
-        setting.merge({ alarmState: state })
-        TcpServer.send('pi', `alarm${data.value ? 'On' : 'Off'}`)
+            TcpServer.send('pi', `alarm${state ? 'On' : 'Off'}`)
+        } catch (ex) {
+            throw ex
+        }
+    }
 
-        await setting.save()
+    async launchAlerte () {
+        try {
+            TcpServer.send('pi', 'alert')
+        } catch (ex) {
+            throw ex
+        }
     }
 
 }

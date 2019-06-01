@@ -6,7 +6,7 @@ class AlarmController {
 
     async get ({ response }) {
         try {
-            const alarms = await Alarm.query().orderBy('id', 'desc').fetch()
+            const alarms = await Alarm.query().where('alarmState', '1').orderBy('id', 'desc').fetch()
 
             response.ok({
                 "alarms": alarms.toJSON()
