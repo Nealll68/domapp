@@ -46,8 +46,6 @@
 </template>
 
 <script>
-//const { remote } = require('electron')
-
 export default {
     name: 'system-bar',
 
@@ -59,9 +57,8 @@ export default {
                 { url: '/alarm', name: 'Alarme', icon: 'fas fa-bell' },
                 { url: '/light', name: 'Eclairage', icon: 'fas fa-lightbulb' },
                 { url: '/heater', name: 'Chauffage', icon: 'fas fa-thermometer-full' },
-                { url: '/statistics', name: 'Statistiques', icon: 'fas fa-chart-pie' },
-                { url: '/scenario', name: 'Scénario', icon: 'fas fa-calendar' },
-                { url: '/video', name: 'Vidéo', icon:'fas fa-video' }
+                { url: '/video', name: 'Vidéo', icon:'fas fa-video' },
+                { url: '/scenario', name: 'Scénario', icon: 'fas fa-calendar' }
             ]
         }
     },

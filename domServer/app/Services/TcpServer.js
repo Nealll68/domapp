@@ -73,19 +73,22 @@ class TcpServer {
     }
 
     send (client, data) {
-        if (client in this.clients) {
-            this.clients[client].write(data.toString())            
-        } else {
-            if (client === 'ni') {
-                throw new TcpUnknownClientException('Impossible de joindre la carte NI')
+        return new Promise((resolve, reject) => {
+            if (client in this.clients) {
+                this.clients[client].write(data.toString())
+                resolve()
             } else {
-                throw new TcpUnknownClientException('Impossible de joindre la Raspberry Pi')
+                if (client === 'ni') {
+                    reject(new TcpUnknownClientException('Impossible de joindre la carte NI'))
+                } else {
+                    reject(new TcpUnknownClientException('Impossible de joindre la Raspberry Pi'))
+                }
             }
-        }
+        })        
     }
 
     async handleNI (reqType, reqValue = null) {
-        if (reqType === 'identification') {
+        if (reqType === 'init') {
             const inLightState = await Light.query().where('lightPosition', 'inside').orderBy('id', 'desc').limit(1).fetch()
             const outLightState = await Light.query().where('lightPosition', 'outside').orderBy('id', 'desc').limit(1).fetch()
             const inLightStateJSON = inLightState.toJSON()
@@ -94,36 +97,44 @@ class TcpServer {
             const allSettings = await Setting.find(1)
 
             this.send('ni', `init;${inLightStateJSON[0].state};${outLightStateJSON[0].state};${allSettings.lightThreshold};${allSettings.lightAutoMode}`)
-
-            console.log('NI identification handled')
-        } else if (reqType === 'init') {
-            const settings = await Setting.find(1)
-            this.send('ni', `init;${settings.lightAutoMode};${settings.lightThreshold}`)
+            console.log('NI init')
         } else if (reqType === 'luminosity') {
             const luminosity = new Luminosity()
             luminosity.lum = reqValue
             await luminosity.save()
+        } else if (reqType === 'inLightState') {
+            const light = new Light()
+            light.lightPosition = 'inside'
+            light.state = reqValue
+            await light.save()
+        } else if (reqType === 'outLightState') {
+            const light = new Light()
+            light.lightPosition = 'outside'
+            light.state = reqValue
+            await light.save()
         }
     }
 
     async handlePI (reqType, reqValue = null) {
-        if (reqType === 'identification') {                        
-            console.log('PI identification handled')            
-        } else if (reqType === 'init') {
-            const settings = await Setting.find(1)
-            this.send('pi', `init;${settings.alarmState}`)
-        } else if (reqType === 'alert') {
-            const alarm = new Alarm()
+        try {
+            if (reqType === 'identification') {                        
+                console.log('PI identification handled')            
+            } else if (reqType === 'init') {
+                const settings = await Setting.find(1)
+                this.send('pi', `init;${settings.alarmState}`)
+            } else if (reqType === 'alert') {                
+                const alarm = new Alarm()
+                alarm.alarmState = reqValue
+                await alarm.save()
+            } else if (reqType === 'alarm') {
+                const settings = new Setting()
 
-            alarm.alarmState = reqValue
+                settings.merge({ alarmState: reqValue })
 
-            await alarm.save()
-        } else if (reqType === 'alarm') {
-            const settings = new Setting()
-
-            settings.merge({ alarmState: reqValue })
-
-            await settings.save()
+                await settings.save()
+            }
+        } catch (ex) {
+            console.log(ex)
         }
     }
 }

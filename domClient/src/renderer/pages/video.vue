@@ -53,7 +53,7 @@ export default {
 
     async mounted () {
         try {
-            const path = `${this.$electron.remote.app.getPath('documents')}\\Pi` 
+            const path = 'C:\\raspi'//`${this.$electron.remote.app.getPath('documents')}\\Pi` 
             const files = await readdir(path)
             for (let i = 0; i < files.length; i++) {
                 let fileStat = await stat(`${path}\\${files[i]}`)
@@ -64,6 +64,7 @@ export default {
                     created_at: fileStat.birthtime
                 })
             }
+            this.videos.reverse()
         } catch (ex) {
             this.errorDialog = true
             this.errorMsg = ex

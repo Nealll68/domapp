@@ -30,8 +30,7 @@ class LightController {
                 data.state = dataSplit[1]
             }
 
-            //await LightService.setState(data.position, data.state)
-            console.log(data.position, data.state)
+            await LightService.setState(data.position, data.state)
 
             response.ok()
         } catch (ex) {

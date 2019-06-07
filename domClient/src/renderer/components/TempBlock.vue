@@ -38,17 +38,11 @@ export default {
     },
     
     async mounted () {
-        this.tempLoading = true
+        this.getLastTemp()
 
-        try {
-            const response = await this.$http.get('/api/temperature/last')
-            this.temp = response.data.temperature
-        } catch (ex) {
-            this.errorDialog = true
-            this.errorMsg = ex.response.data
-        }
-
-        this.tempLoading = false
+        setInterval(function () {
+            this.getLastTemp()
+        }.bind(this), 60000)
     },
 
     methods: {
@@ -69,6 +63,20 @@ export default {
             }
 
             return this.tempColor[index]
+        },
+
+        async getLastTemp () {            
+            this.tempLoading = true
+
+            try {
+                const response = await this.$http.get('/api/temperature/last')
+                this.temp = response.data.temperature
+            } catch (ex) {
+                this.errorDialog = true
+                this.errorMsg = ex.response.data
+            }
+
+            this.tempLoading = false
         }
     }
 }

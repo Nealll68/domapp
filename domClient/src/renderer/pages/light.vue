@@ -53,9 +53,10 @@
 				<v-card-text>
 					<v-subheader>Mode autonome</v-subheader>
 					Le mode autonome active la gestion automatique de l'éclairage, c'est à dire que l'éclairage va s'allumer et s'éteindre selon le seuil configuré.
+					<p><strong class="red--text text--lighten-1">Si vous changez l'état d'un éclairage manuellement le mode autonome se désactivera automatiquement</strong></p>
 
 					<v-subheader>Seuil d'allumage de l'éclairage</v-subheader>
-					Le seuil d'allumage permet de régler à partir de quelle luminosité veut-on que l'éclairage s'allume (Le seuil est utilisé seulement si le mode autonome est activé)
+					Le seuil d'allumage permet de régler à partir de quelle luminosité veut-on que l'éclairage s'allume (Le seuil est utilisé seulement si le mode autonome est activé)					
 				</v-card-text>
 
 				<v-divider></v-divider>
@@ -93,43 +94,40 @@ export default {
 				'Lumineux'
 			],
 			toggleLightMode: false,
-			lumThreshold: 0		
+			lumThreshold: 0,
+			initToggleLightMode: false,
+			initLumThreshold: false	
 		}
 	},
 
 	async mounted () {
-		this.switchLoading = true
-		this.sliderLoading = true
-
-		try {
-			const response = await this.$http.get('/api/setting')
-
-			this.toggleLightMode = response.data.lightAutoMode
-			this.lumThreshold = response.data.lightThreshold
-		} catch (ex) {
-			this.errorDialog = true
-			this.errorMsg = ex.response.data
-		}
-
-		this.switchLoading = false
-		this.sliderLoading = false
+		this.getLightAutoMode()
+		this.getLightTreshold() 
+		
+		setInterval(function () {
+			this.getLightAutoMode()
+			this.getLightTreshold()
+		}.bind(this), 1000)
 	},
 
 	watch: {
 		async toggleLightMode (value) {
-			this.switchLoading = true
-			
-			try {
-				await this.$http.post('/api/setting', {
-					field: 'lightAutoMode',
-					value: this.toggleLightMode
-				})
-			} catch (ex) {
-				this.errorDialog = true
-            	this.errorMsg = ex.response.data
-			}
 
-			this.switchLoading = false				
+			if (this.initToggleLightMode) {
+				this.switchLoading = true
+				
+				try {
+					await this.$http.post('/api/setting', {
+						field: 'lightAutoMode',
+						value: this.toggleLightMode
+					})
+				} catch (ex) {
+					this.errorDialog = true
+					this.errorMsg = ex.response.data
+				}
+
+				this.switchLoading = false				
+			}
 		},
 
 		lumThreshold (value) {
@@ -143,18 +141,57 @@ export default {
 
 	methods: {
 		async setLumThreshold () {
-			this.sliderLoading = true
-			
+			if (this.initLumThreshold) {
+				this.sliderLoading = true
+				
+				try {
+					await this.$http.post('/api/setting', {
+						field: 'lightThreshold',
+						value: this.lumThreshold
+					})
+				} catch (ex) {
+					this.errorDialog = true
+					this.errorMsg = ex.response.data
+				}
+
+				this.sliderLoading = false
+			}
+		},
+
+		async getLightAutoMode () {
+			this.switchLoading = true
+
 			try {
-				await this.$http.post('/api/setting', {
-					field: 'lightThreshold',
-					value: this.lumThreshold
-				})
+				const response = await this.$http.get('/api/setting')
+
+				this.toggleLightMode = response.data.lightAutoMode
+
+				setTimeout(function () {
+					this.initToggleLightMode = true
+				}.bind(this), 1000)
 			} catch (ex) {
 				this.errorDialog = true
-            	this.errorMsg = ex.response.data
+				this.errorMsg = ex.response.data
 			}
 
+			this.switchLoading = false
+		},
+
+		async getLightTreshold () {
+			this.sliderLoading = true
+
+			try {
+				const response = await this.$http.get('/api/setting')
+
+				this.lumThreshold = response.data.lightThreshold
+
+				setTimeout(function () {
+					this.initLumThreshold = true
+				}.bind(this), 1000)
+			} catch (ex) {
+				this.errorDialog = true
+				this.errorMsg = ex.response.data
+			}
 			this.sliderLoading = false
 		}
 	}

@@ -29,32 +29,39 @@ class SerialService {
     }
 
     send (data) {
-        try {
-            this.port.write(data)
-        } catch (ex) {
-            console.log(ex)
-            throw new SerialUnreachableException('Impossible de joindre l\'Arduino')
-        }
+        return new Promise((resolve, reject) => {
+            try {
+                this.port.write(data)
+                resolve()
+            } catch (ex) {
+                console.log(ex)
+                reject(new SerialUnreachableException('Impossible de joindre l\'Arduino'))
+            }
+        })
     }
 
     async handleData (data) {
         // Split string and handle data
         let dataSplit = data.toString().split(';')
 
-        if (dataSplit[0] === 'init') {            
-            const allSettings = await Setting.find(1)
-            const initMessage = `init2;${allSettings.heaterState};${allSettings.heaterThreshold}`
-            this.send(initMessage)
-        } else if (dataSplit[0] === 'temperature') {
-            const temperature = new Temperature()
-            temperature.temp = Number.parseFloat(dataSplit[1]).toFixed(0)
-            await temperature.save()
-        } else if (dataSplit[0] === 'humidity') {
-            const humidity = new Humidity()
-            humidity.humidity = Number.parseFloat(dataSplit[1]).toFixed(0)
-            await humidity.save()
-        } else if (dataSplit[0] === 'alarm') {
-            await AlarmService.launchAlert()
+        try {
+            if (dataSplit[0] === 'init') {            
+                const allSettings = await Setting.find(1)
+                const initMessage = `init2;${allSettings.heaterState};${allSettings.heaterThreshold}`
+                this.send(initMessage)
+            } else if (dataSplit[0] === 'temperature') {
+                const temperature = new Temperature()
+                temperature.temp = Number.parseFloat(dataSplit[1]).toFixed(0)
+                await temperature.save()
+            } else if (dataSplit[0] === 'humidity') {
+                const humidity = new Humidity()
+                humidity.humidity = Number.parseFloat(dataSplit[1]).toFixed(0)
+                await humidity.save()
+            } else if (dataSplit[0] === 'alarm') {
+                await AlarmService.launchAlert()
+            }
+        } catch (ex) {
+            console.log(ex)
         }
     }
 }

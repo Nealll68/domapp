@@ -2,6 +2,7 @@
 
 const Setting = use('App/Models/Setting')
 const TcpServer = use('App/Services/TcpServer')
+const Alarm = use('App/Models/Alarm')
 
 class AlarmService {
 
@@ -10,16 +11,21 @@ class AlarmService {
             const setting = await Setting.find(1)
             setting.merge({ alarmState: state })
             await setting.save()
-
-            TcpServer.send('pi', `alarm${state ? 'On' : 'Off'}`)
+            
+            await TcpServer.send('pi', `alarm${state ? 'On' : 'Off'}`)
         } catch (ex) {
+            console.log(ex)
             throw ex
         }
     }
 
-    async launchAlerte () {
+    async launchAlert () {
         try {
-            TcpServer.send('pi', 'alert')
+            const alarm = new Alarm()
+            alarm.alarmState = 1
+            await alarm.save()
+
+            await TcpServer.send('pi', 'alert')
         } catch (ex) {
             throw ex
         }
