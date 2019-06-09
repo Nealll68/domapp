@@ -37,16 +37,24 @@ export default {
     
     async mounted () {
         this.humLoading = true
-
-        try {
-            const response = await this.$http.get('/api/humidity/last')
-            this.hum = response.data.humidity
-        } catch (ex) {
-            this.errorDialog = true
-			this.errorMsg = ex.response.data
-        }
-
+        await this.getLastHum()
         this.humLoading = false
+
+        setInterval(async function () {
+            await this.getLastHum()
+        }.bind(this), 60000)
+    },
+
+    methods: {
+        async getLastHum() {
+            try {
+                const response = await this.$http.get('/api/humidity/last')
+                this.hum = response.data.humidity
+            } catch (ex) {
+                this.errorDialog = true
+                this.errorMsg = ex.response.data
+            }
+        }
     }
 }
 </script>

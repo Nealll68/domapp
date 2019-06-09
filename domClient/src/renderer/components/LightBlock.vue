@@ -72,18 +72,13 @@ export default {
 	},
 
 	async mounted () {
-        this.lightCardLoading = true
-        
-        try {
-            const response = await this.$http.get('/api/light/get-all-light-state')
-            this.inLightState = response.data.inLightState
-			this.outLightState = response.data.outLightState
-        } catch (ex) {
-			this.errorDialog = true
-			this.errorMsg = ex.response.data
-        }
-
-        this.lightCardLoading = false
+		this.lightCardLoading = true
+		await this.getLightState()
+		this.lightCardLoading = false
+		
+		setInterval(async function () {
+			await this.getLightState()
+		}.bind(this), 1000)
 	},
 
 	methods: {
@@ -119,6 +114,17 @@ export default {
 			}
 
 			this.btnOutLightLoading = false
+		},
+
+		async getLightState () {			
+			try {
+				const response = await this.$http.get('/api/light/get-all-light-state')
+				this.inLightState = response.data.inLightState
+				this.outLightState = response.data.outLightState
+			} catch (ex) {
+				this.errorDialog = true
+				this.errorMsg = ex.response.data
+			}
 		}
 	}
 }

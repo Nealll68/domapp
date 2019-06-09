@@ -38,10 +38,12 @@ export default {
     },
     
     async mounted () {
-        this.getLastTemp()
+        this.tempLoading = true
+        await this.getLastTemp()
+        this.tempLoading = false
 
-        setInterval(function () {
-            this.getLastTemp()
+        setInterval(async function () {
+            await this.getLastTemp()
         }.bind(this), 60000)
     },
 
@@ -65,9 +67,7 @@ export default {
             return this.tempColor[index]
         },
 
-        async getLastTemp () {            
-            this.tempLoading = true
-
+        async getLastTemp () {
             try {
                 const response = await this.$http.get('/api/temperature/last')
                 this.temp = response.data.temperature
@@ -75,8 +75,6 @@ export default {
                 this.errorDialog = true
                 this.errorMsg = ex.response.data
             }
-
-            this.tempLoading = false
         }
     }
 }

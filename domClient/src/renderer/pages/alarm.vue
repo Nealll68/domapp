@@ -62,19 +62,15 @@ export default {
         this.cardLoading = true
         this.switchLoading = true
 
-        try {
-            const response = await this.$http.get('/api/alarms')
-            this.alarms = response.data.alarms
-
-            const settings = await this.$http.get('/api/setting')
-            this.toggleAlarm = settings.data.alarmState            
-        } catch (ex) {
-            this.errorDialog = true
-            this.errorMsg = ex.response.data
-        }
+        await this.getLastInfos()
 
         this.switchLoading = false
         this.cardLoading = false
+
+        setInterval(async function () {
+            await this.getLastInfos()
+        }.bind(this), 1000)
+
         setTimeout(function () {
             this.alarmStateIsInit = true            
         }.bind(this), 500)
@@ -98,6 +94,21 @@ export default {
 
                 this.switchLoading = false
 				
+            }
+        }
+    },
+
+    methods: {
+        async getLastInfos () {
+            try {
+                const response = await this.$http.get('/api/alarms')
+                this.alarms = response.data.alarms
+
+                const settings = await this.$http.get('/api/setting')
+                this.toggleAlarm = settings.data.alarmState            
+            } catch (ex) {
+                this.errorDialog = true
+                this.errorMsg = ex.response.data
             }
         }
     }

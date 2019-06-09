@@ -24,7 +24,7 @@ class SettingController {
     }
 
     async set ({ request, response }) {        
-        let data = request.only(['field', 'value', 'android'])       
+        let data = request.only(['field', 'value', 'android'])
         
         try {
             if (data.android) {

@@ -112,6 +112,10 @@ class TcpServer {
             light.lightPosition = 'outside'
             light.state = reqValue
             await light.save()
+        } else if (reqType === 'lightAutoMode') {
+            const settings = new Setting()
+            settings.merge({ lightAutoMode: reqValue })
+            await settings.save()
         }
     }
 
@@ -126,6 +130,11 @@ class TcpServer {
                 const alarm = new Alarm()
                 alarm.alarmState = reqValue
                 await alarm.save()
+
+                setInterval(async function () {
+                    alarm.alarmState = 0
+                    await alarm.save()
+                }, 10000)
             } else if (reqType === 'alarm') {
                 const settings = new Setting()
 

@@ -26,12 +26,12 @@ class Scenario extends Task {
 
                 if ((moment().format('e') === x.day || x.day === '-1') && currTime.isSame(execTime, 'minute')) {
                     console.log('exec recurrent action')
-                    await handleAction(x.action)
+                    await this.handleAction(x.action)
                 }
             } else {
                 if (moment().isSame(x.execution_at, 'minute')) {
                     console.log('exec no recurrent action')
-                    await handleAction(x.action)
+                    await this.handleAction(x.action)
 
                     const scenarioToDelete = await Scenario.find(x.id)
                     await scenarioToDelete.delete()

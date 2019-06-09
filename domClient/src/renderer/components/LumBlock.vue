@@ -37,16 +37,26 @@ export default {
     
     async mounted () {
         this.lumLoading = true
-
-        try {
-            const response = await this.$http.get('/api/luminosity/last')
-            this.lum = response.data.luminosity
-        } catch (ex) {
-            this.errorDialog = true
-			this.errorMsg = ex.response.data
-        }
+        
+        await this.getLastLum()
 
         this.lumLoading = false
+
+        setInterval(async function () {
+            this.getLastLum()
+        }.bind(this), 60000)
+    },
+
+    methods: {
+        async getLastLum () {
+            try {
+                const response = await this.$http.get('/api/luminosity/last')
+                this.lum = response.data.luminosity
+            } catch (ex) {
+                this.errorDialog = true
+                this.errorMsg = ex.response.data
+            }
+        }
     }
 }
 </script>

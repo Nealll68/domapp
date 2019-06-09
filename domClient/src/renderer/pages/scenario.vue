@@ -157,15 +157,7 @@ export default {
 	},
 
 	async mounted () {
-		this.tableLoading = true
-		try {
-			const response = await this.$http.get('/api/scenario/all')
-			this.scenarios.push.apply(this.scenarios, response.data)
-		} catch (ex) {
-			this.errorDialog = true
-			this.errorMsg = ex.response.data
-		}
-		this.tableLoading = false
+		await this.getScenario()
 	},
 
 	computed: {
@@ -175,6 +167,18 @@ export default {
 	},
 
 	methods: {
+		async getScenario () {
+			this.tableLoading = true
+			try {
+				const response = await this.$http.get('/api/scenario/all')
+				this.scenarios = response.data
+			} catch (ex) {
+				this.errorDialog = true
+				this.errorMsg = ex.response.data
+			}
+			this.tableLoading = false
+		},
+
 		async saveScenario () {
 			this.formLoading = true
 			try {				
@@ -188,14 +192,7 @@ export default {
 						day: this.day
 					})
 
-					this.scenarios.push({
-						name: this.name,
-						action: this.action,
-						isRecurrent: this.isRecurrent,
-						date: this.datePickerVal,
-						time: this.timePickerVal,
-						day: this.day
-					})
+					await this.getScenario()
 
 					this.dialog = false
 					this.$refs.form.reset()
@@ -237,7 +234,7 @@ export default {
 		},
 
 		getReadableDate (value) {
-			return this.$moment(value).format('ddd Do MMMM YYYY')
+			return this.$moment(value).format('ddd Do MMMM YYYY HH:mm')
 		}
 	}
 }

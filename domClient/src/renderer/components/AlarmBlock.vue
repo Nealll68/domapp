@@ -36,16 +36,24 @@ export default {
     
     async mounted () {
         this.alarmLoading = true
-
-        try {
-            const response = await this.$http.get('/api/setting')
-            this.alarmState = response.data.alarmState
-        } catch (ex) {
-            this.errorDialog = true
-			this.errorMsg = ex.response.data
-        }
-
+        await this.getAlarmState()       
         this.alarmLoading = false
+
+        setInterval(async function () {
+            this.getAlarmState()
+        }.bind(this), 1000)
+    },
+
+    methods: {
+        async getAlarmState () {
+            try {
+                const response = await this.$http.get('/api/setting')
+                this.alarmState = response.data.alarmState
+            } catch (ex) {
+                this.errorDialog = true
+                this.errorMsg = ex.response.data
+            }
+        }
     }
 }
 </script>

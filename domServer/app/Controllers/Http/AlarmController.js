@@ -30,6 +30,21 @@ class AlarmController {
         }
     }
 
+    async switchLast ({ response }) {
+        try {
+            const alarm = await Alarm.query().orderBy('id', 'desc').limit(1).fetch()
+
+            alarm.merge({ alarmState: 0 })
+
+            await alarm.save()
+
+            response.ok()
+        } catch (ex) {
+            console.log(ex)
+            response.internalServerError(ex.toString())
+        }
+    }
+
 }
 
 module.exports = AlarmController

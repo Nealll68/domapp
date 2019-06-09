@@ -101,12 +101,17 @@ export default {
 	},
 
 	async mounted () {
-		this.getLightAutoMode()
-		this.getLightTreshold() 
+		this.sliderLoading = true
+		this.switchLoading = true
+
+		await this.getLightAutoMode()
+		await this.getLightTreshold() 
+
+		this.sliderLoading = false
+		this.switchLoading = false
 		
-		setInterval(function () {
-			this.getLightAutoMode()
-			this.getLightTreshold()
+		setInterval(async function () {
+			await this.getLightAutoMode()
 		}.bind(this), 1000)
 	},
 
@@ -159,8 +164,6 @@ export default {
 		},
 
 		async getLightAutoMode () {
-			this.switchLoading = true
-
 			try {
 				const response = await this.$http.get('/api/setting')
 
@@ -173,13 +176,9 @@ export default {
 				this.errorDialog = true
 				this.errorMsg = ex.response.data
 			}
-
-			this.switchLoading = false
 		},
 
 		async getLightTreshold () {
-			this.sliderLoading = true
-
 			try {
 				const response = await this.$http.get('/api/setting')
 
@@ -192,7 +191,6 @@ export default {
 				this.errorDialog = true
 				this.errorMsg = ex.response.data
 			}
-			this.sliderLoading = false
 		}
 	}
 }

@@ -17,7 +17,7 @@
     "postinstall": ""
   },
   "build": {
-    "productName": "dom_client",
+    "productName": "Domapp",
     "appId": "com.example.yourapp",
     "directories": {
       "output": "build"
